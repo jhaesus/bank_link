@@ -13,7 +13,7 @@ module BankLink
       marshal_dump.count
     end
 
-    if RUBY_VERSION < "2.0.0"
+    if RUBY_VERSION < "2.0.0" || RUBY_ENGINE == "rbx"
       def [](name)
         @table[name.to_sym]
       end
