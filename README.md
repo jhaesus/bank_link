@@ -1,4 +1,4 @@
-# BankLink [![Gem Version](https://badge.fury.io/rb/bank_link.png)](http://badge.fury.io/rb/bank_link) [![Build Status](https://travis-ci.org/jhaesus/bank_link.png?branch=master)](https://travis-ci.org/jhaesus/bank_link)[![Dependency Status](https://gemnasium.com/jhaesus/bank_link.png)](https://gemnasium.com/jhaesus/bank_link)
+# BankLink [![Gem Version](https://badge.fury.io/rb/bank_link.png)](https://rubygems.org/gems/bank_link) [![Build Status](https://travis-ci.org/jhaesus/bank_link.png?branch=master)](https://travis-ci.org/jhaesus/bank_link) [![Dependency Status](https://gemnasium.com/jhaesus/bank_link.png)](https://gemnasium.com/jhaesus/bank_link)
 
 Helper gem to simplify bank link usage in Rails projects
 
@@ -74,6 +74,16 @@ BankLink.configuration do |config|
   = bank_link_tag link, @object, { :form => {:method => :get }} do
     = submit_tag
 ```
+
+### Additional Info
+[Pangalink.net](https://pangalink.net/info)
+#### Documentations
+- [Danske Bank Documentation](http://www.danskebank.ee/et/14732.html)
+- [Krediidipank Documentation](http://www.krediidipank.ee/business/settlements/bank-link/tehniline_kirjeldus.pdf)
+- [LHV Documentation](http://www.lhv.ee/images/docs/Bank_Link_Technical_Specification-ET.pdf)
+- [Nordea Documentation](http://www.nordea.ee/sitemod/upload/root/www.nordea.ee%20-%20default/Teenused%20firmale/E-Payment_v1_1.pdf)
+- [SEB Documentation](http://www.seb.ee/ari/maksete-kogumine/maksete-kogumine-internetis/tehniline-spetsifikatsioon)
+- [Swedbank Documentation](https://www.swedbank.ee/static/pdf/business/d2d/paymentcollection/info_banklink_techspec_est.pdf)
 
 ## Contributing
 
