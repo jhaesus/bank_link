@@ -18,9 +18,9 @@ module BankLink
         OpenSSL::Digest::SHA1
       end
 
-      def generate
+      def generate version=data[query_key]
         Base64.strict_encode64(
-          algorithm_key.sign(algorithm.new, request_data)
+          algorithm_key.sign(algorithm.new, request_data(version))
         )
       end
 
@@ -33,8 +33,8 @@ module BankLink
         ["%03d" % value.length, value]
       end
 
-      def request_data
-        order.collect { |key_name|
+      def request_data version
+        order(version).collect { |key_name|
           field_for data[key_name].to_s
         }.flatten.join
       end

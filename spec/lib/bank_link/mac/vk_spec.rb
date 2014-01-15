@@ -30,6 +30,6 @@ describe BankLink::Mac::VK do
   end
 
   describe ".request_data" do
-    specify { expect(subject.instance_eval { request_data }).to eq("0041001000000000000000000000000000") }
+    specify { expect(subject.instance_eval { request_data("1001") }).to eq("0041001000000000000000000000000000") }
   end
 end

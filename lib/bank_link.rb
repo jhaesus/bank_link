@@ -10,7 +10,7 @@ end
 module BankLink
   class << self
     def configuration
-      block_given? ? yield(configuration) : (@configuration ||= BankLink::Configuration.instance)
+      block_given? ? yield(configuration) : (@configuration ||= Configuration.instance)
     end
 
     def each &block

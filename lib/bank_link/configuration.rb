@@ -10,9 +10,9 @@ module BankLink
 
     def links name=nil, url=nil, &block
       if name && url
-        links[name] = BankLink::Link.new(name, url, &block)
+        links[name] = Link.new(name, url, &block)
       else
-        @links ||= BankLink::EStruct.new
+        @links ||= EStruct.new
       end
     end
 
@@ -21,12 +21,12 @@ module BankLink
     end
 
     def mac_fields &block
-      block_given? ? yield(mac_fields) : (@mac_fields ||= BankLink::EStruct.new)
+      block_given? ? yield(mac_fields) : (@mac_fields ||= EStruct.new)
     end
 
     def initialize
       mac_fields do |ml|
-        ml.VK_SERVICE = BankLink::EStruct.new(
+        ml.VK_SERVICE = EStruct.new(
           "1001" => [
             :VK_SERVICE,
             :VK_VERSION,
@@ -66,7 +66,7 @@ module BankLink
             :VK_MSG
           ]
         )
-        ml.SOLOPMT_VERSION = BankLink::EStruct.new(
+        ml.SOLOPMT_VERSION = EStruct.new(
           "0003" => [
             :SOLOPMT_VERSION,
             :SOLOPMT_STAMP,

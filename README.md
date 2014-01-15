@@ -1,4 +1,4 @@
-# BankLink [![Gem Version](https://badge.fury.io/rb/bank_link.png)](https://rubygems.org/gems/bank_link) [![Build Status](https://travis-ci.org/jhaesus/bank_link.png?branch=master)](https://travis-ci.org/jhaesus/bank_link) [![Dependency Status](https://gemnasium.com/jhaesus/bank_link.png)](https://gemnasium.com/jhaesus/bank_link)
+# BankLink [![Gem Version](https://badge.fury.io/rb/bank_link.png)](https://rubygems.org/gems/bank_link) [![Build Status](https://travis-ci.org/jhaesus/bank_link.png?branch=master)](https://travis-ci.org/jhaesus/bank_link) [![Dependency Status](https://gemnasium.com/jhaesus/bank_link.png)](https://gemnasium.com/jhaesus/bank_link) [![Code Climate](https://codeclimate.com/github/jhaesus/bank_link.png)](https://codeclimate.com/github/jhaesus/bank_link)
 
 Helper gem to simplify bank link usage in Rails projects
 
@@ -75,6 +75,12 @@ BankLink.configuration do |config|
     = submit_tag
 ```
 
+#### Verifying Responses
+```ruby
+  link = BankLink.configuration.links.name_of_link
+  link.verify params
+```
+
 ### Additional Info
 [Pangalink.net](https://pangalink.net/info)
 #### Documentations
@@ -92,3 +98,5 @@ BankLink.configuration do |config|
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+[![GA](http://ga.webdigi.co.uk/fbga.php?googlecode=UA-44875948-6&pagelink=https%3A//github.com/jhaesus/bank_link&pagetitle=jhaesus/bank_link)](https://github.com/jhaesus/bank_link)

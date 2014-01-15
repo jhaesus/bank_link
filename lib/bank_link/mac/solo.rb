@@ -16,13 +16,13 @@ module BankLink
         OpenSSL::Digest::MD5
       end
 
-      def generate
-        algorithm.hexdigest(request_data.join).upcase
+      def generate version=data[query_key]
+        algorithm.hexdigest(request_data(version).join).upcase
       end
 
       private
-      def request_data
-        order.collect { |key_name|
+      def request_data version
+        order(version).collect { |key_name|
           field_for data[key_name].to_s
         } + [field_for(link.data.mac_key)]
       end

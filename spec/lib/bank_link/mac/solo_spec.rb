@@ -38,7 +38,7 @@ describe BankLink::Mac::Solo do
   end
 
   describe ".request_data" do
-    specify { expect(mac_sha1.instance_eval { request_data }).to eq(["0003&", "&", "&", "&", "&", "&", "&", "SOMEKEY&"]) }
-    specify { expect(mac_md5.instance_eval { request_data }).to eq(["0003&", "&", "&", "&", "&", "&", "&", "SOMEKEY&"]) }
+    specify { expect(mac_sha1.instance_eval { request_data("0003") }).to eq(["0003&", "&", "&", "&", "&", "&", "&", "SOMEKEY&"]) }
+    specify { expect(mac_md5.instance_eval { request_data("0003") }).to eq(["0003&", "&", "&", "&", "&", "&", "&", "SOMEKEY&"]) }
   end
 end

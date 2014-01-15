@@ -24,17 +24,21 @@ module BankLink
         raise NotImplementedError
       end
 
+      def verify version, mac
+        public_key = OpenSSL::X509::Certificate.new(link.data.public_key).public_key
+        public_key.verify algorithm.new, Base64.strict_decode64(mac), request_data(version)
+      end
+
       def key
         self.class.key
       end
 
-      private
       def query_key
         self.class.query_key
       end
 
-      def order
-        BankLink.configuration.mac_fields[query_key][data[query_key].intern]
+      def order version
+        BankLink.configuration.mac_fields[query_key][version.intern]
       end
 
       def algorithm
