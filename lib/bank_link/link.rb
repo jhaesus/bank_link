@@ -1,4 +1,3 @@
-require "bank_link/estruct"
 require "bank_link/mac"
 
 module BankLink
@@ -8,16 +7,16 @@ module BankLink
     def initialize name, url, &block
       self.name = name
       self.url = url
-      self.data = EStruct.new(
+      self.data = Hashie::Mash.new(
         :mac_class => Mac::VK,
         :encoding => BankLink.configuration.default_encoding
       )
-      self.form = EStruct.new
+      self.form = Hashie::Mash.new
       yield(data, form) if block_given?
     end
 
     def processed_data object, overrides={}
-      content = EStruct.new(form.marshal_dump.merge(overrides))
+      content = Hashie::Mash.new(form.merge(overrides))
 
       content.each do |key, value|
         content[key] = content[key].call(self, object) if content[key].is_a?(Proc)
@@ -31,7 +30,7 @@ module BankLink
     end
 
     def verify params
-      content = EStruct.new(params)
+      content = Hashie::Mash.new(params)
       mac = data.mac_class.new(self, content)
       version = params[mac.query_key]
       mac.verify version, params[mac.key]

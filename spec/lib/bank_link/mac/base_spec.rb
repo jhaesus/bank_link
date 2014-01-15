@@ -5,12 +5,12 @@ describe BankLink::Mac::Base do
 
   let(:link) { BankLink::Link.new(:aaa, "aaa") }
 
-  let(:xx) { BankLink::EStruct.new(:x => 5) }
+  let(:xx) { Hashie::Mash.new(:x => 5) }
 
   subject { BankLink::Mac::Base.new(link, xx) }
 
   describe "#new" do
-    specify { expect(subject.data).to be_a(BankLink::EStruct) }
+    specify { expect(subject.data).to be_a(Hashie::Mash) }
     specify { expect(subject.link).to be_a(BankLink::Link) }
   end
 
