@@ -16,7 +16,7 @@ describe BankLink::Mac::Solo do
     end
   end
 
-  let(:data) { BankLink::EStruct.new(:SOLOPMT_VERSION => "0003") }
+  let(:data) { Hashie::Mash.new(:SOLOPMT_VERSION => "0003") }
 
   let(:mac_sha1) { BankLink::Mac::Solo.new(link_sha1,data) }
   let(:mac_md5) { BankLink::Mac::Solo.new(link_md5,data) }

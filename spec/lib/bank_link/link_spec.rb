@@ -7,8 +7,8 @@ describe BankLink::Link do
       end
       link
     end
-    specify { expect(link.data).to be_a BankLink::EStruct }
-    specify { expect(link.form).to be_a BankLink::EStruct }
+    specify { expect(link.data).to be_a Hashie::Mash }
+    specify { expect(link.form).to be_a Hashie::Mash }
     specify { expect(link.name).to eq(:name) }
     specify { expect(link.url).to eq("url") }
     specify { expect(link.data.bla).to eq(5) }

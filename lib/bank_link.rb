@@ -1,5 +1,7 @@
 require "bank_link/version"
 require "bank_link/configuration"
+require "hashie"
+
 begin
   require "rails/all"
 rescue LoadError

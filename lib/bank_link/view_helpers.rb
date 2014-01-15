@@ -1,9 +1,7 @@
-require "bank_link/estruct"
-
 module BankLink
   module ViewHelpers
     def bank_link_tag link, object=nil, options={}, &block
-      form_data = BankLink::EStruct.new(link.processed_data(object, options[:values] || {}))
+      form_data = Hashie::Mash.new(link.processed_data(object, options[:values] || {}))
 
       form_options = { :action => link.url, :method => :post }
 

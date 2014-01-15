@@ -1,4 +1,3 @@
-require "bank_link/estruct"
 require "bank_link/link"
 require "singleton"
 
@@ -12,21 +11,21 @@ module BankLink
       if name && url
         links[name] = Link.new(name, url, &block)
       else
-        @links ||= EStruct.new
+        @links ||= Hashie::Mash.new
       end
     end
 
     def each &block
-      links.marshal_dump.each_value(&block)
+      links.each_value(&block)
     end
 
     def mac_fields &block
-      block_given? ? yield(mac_fields) : (@mac_fields ||= EStruct.new)
+      block_given? ? yield(mac_fields) : (@mac_fields ||= Hashie::Mash.new)
     end
 
     def initialize
       mac_fields do |ml|
-        ml.VK_SERVICE = EStruct.new(
+        ml.VK_SERVICE = Hashie::Mash.new(
           "1001" => [
             :VK_SERVICE,
             :VK_VERSION,
@@ -66,7 +65,7 @@ module BankLink
             :VK_MSG
           ]
         )
-        ml.SOLOPMT_VERSION = EStruct.new(
+        ml.SOLOPMT_VERSION = Hashie::Mash.new(
           "0003" => [
             :SOLOPMT_VERSION,
             :SOLOPMT_STAMP,

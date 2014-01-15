@@ -9,7 +9,7 @@ describe BankLink::Mac::VK do
     end
   end
 
-  let(:data) { BankLink::EStruct.new(:VK_SERVICE => "1001") }
+  let(:data) { Hashie::Mash.new(:VK_SERVICE => "1001") }
 
   subject { BankLink::Mac::VK.new(link,data) }
 

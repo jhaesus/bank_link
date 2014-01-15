@@ -35,7 +35,7 @@ describe BankLink::Configuration do
     end
 
     context "without arguments" do
-      specify { expect(subject.links).to be_a BankLink::EStruct }
+      specify { expect(subject.links).to be_a Hashie::Mash }
     end
   end
 
@@ -43,13 +43,13 @@ describe BankLink::Configuration do
     context "given block" do
       specify do
         subject.mac_fields do |mf|
-          expect(mf).to be_a BankLink::EStruct
+          expect(mf).to be_a Hashie::Mash
         end
       end
     end
 
     context "without arguments" do
-      specify { expect(subject.mac_fields).to be_a BankLink::EStruct }
+      specify { expect(subject.mac_fields).to be_a Hashie::Mash }
     end
   end
 
