@@ -24,67 +24,9 @@ module BankLink
     end
 
     def initialize
-      mac_fields do |ml|
-        ml.VK_SERVICE = Hashie::Mash.new(
-          "1001" => [
-            :VK_SERVICE,
-            :VK_VERSION,
-            :VK_SND_ID,
-            :VK_STAMP,
-            :VK_AMOUNT,
-            :VK_CURR,
-            :VK_ACC,
-            :VK_NAME,
-            :VK_REF,
-            :VK_MSG
-          ],
-          "1101" => [
-            :VK_SERVICE,
-            :VK_VERSION,
-            :VK_SND_ID,
-            :VK_REC_ID,
-            :VK_STAMP,
-            :VK_T_NO,
-            :VK_AMOUNT,
-            :VK_CURR,
-            :VK_REC_ACC,
-            :VK_REC_NAME,
-            :VK_SND_ACC,
-            :VK_SND_NAME,
-            :VK_REF,
-            :VK_MSG,
-            :VK_T_DATE
-          ],
-          "1901" => [
-            :VK_SERVICE,
-            :VK_VERSION,
-            :VK_SND_ID,
-            :VK_REC_ID,
-            :VK_STAMP,
-            :VK_REF,
-            :VK_MSG
-          ]
-        )
-        ml.SOLOPMT_VERSION = Hashie::Mash.new(
-          "0003" => [
-            :SOLOPMT_VERSION,
-            :SOLOPMT_STAMP,
-            :SOLOPMT_RCV_ID,
-            :SOLOPMT_AMOUNT,
-            :SOLOPMT_REF,
-            :SOLOPMT_DATE,
-            :SOLOPMT_CUR
-          ],
-          "0002" => [
-            :SOLOPMT_VERSION,
-            :SOLOPMT_STAMP,
-            :SOLOPMT_RCV_ID,
-            :SOLOPMT_AMOUNT,
-            :SOLOPMT_REF,
-            :SOLOPMT_DATE,
-            :SOLOPMT_CUR
-          ]
-        )
+      file_data = YAML.load(File.read(File.dirname(__FILE__) + "/../../mac_fields.yml"))
+      file_data.each do |type, versions|
+        mac_fields { |mf| mf[type] = Hashie::Mash.new(versions) }
       end
     end
   end
