@@ -21,69 +21,108 @@ $ gem install bank_link
 ### Set Up Initializer
 ```ruby
 BankLink.configuration do |config|
-  config.default_encoding = "UTF-8" #used only if link.data.encoding_key is set
-
-  config.links(:name_of_link, "https://url.of.link") do |data, form|
-    form[:VK_SERVICE] = "1001"
-    form[:VK_VERSION] = "008"
-    form[:VK_AMOUNT] = Proc.new { |link, object| object.price }
-    form[:VK_CURR] = "EUR"
 ```
-#### Additional Options
-##### Encoding
 ```ruby
-    data.encoding_key = "VK_CHARSET"
-    data.encoding_key = "VK_ENCODING"
-    data.encoding = "UTF-8"
+BankLink do |config|
 ```
-##### Mac
+#### Override mac fields if you so wish
+Defaults can be found in [mac_fields.yml](https://github.com/jhaesus/bank_link/blob/master/mac_fields.yml)
 ```ruby
-    data.mac_class = BankLink::Mac::VK #default
-    data.mac_key = File.read("my/private_key.pem")
-    data.mac_key_passphrase = File.read("my_password")
-    data.algorithm = OpenSSL::Digest::SHA1 #default for VK
+  config.mac_fields do |mac_fields|
+    mac_fields.SOLOPMT_VERSION["0003"] = [
+      :VERSION,
+      :STAMP,
+      :RCV_ID,
+      :AMOUNT,
+      :REF,
+      :DATE,
+      :CUR
+    ]
+  end
+```
+#### Add banks
+```ruby
+  config.banks :name_of_bank do |bank|
+```
+##### Change bank settings
+```ruby
+    bank.settings do |settings|
+```
+###### Encoding
+```ruby
+      settings.encoding_key = "VK_CHARSET"
+      settings.encoding = "UTF-8"
+```
+###### Private/Public keys and passphrases
+```ruby
+      settings.private_key = File.read("my/private_key.pem")
+      settings.private_key_passphrase = File.read("my_password")
+      settings.public_key = File.read("bank/certificate")
+```
+###### Mac calculation settings
+```ruby
+      settings.mac_class = BankLink::Mac::VK
+      settings.digest = OpenSSL::Digest::SHA1
 
-    data.mac_class = BankLink::Mac::Solo
-    data.mac_key = File.read("my_key.txt")
-    data.algorithm = OpenSSL::Digest::MD5 #default for Solo
+      settings.mac_class = BankLink::Mac::Solo
+      settings.digest = OpenSSL::Digest::MD5
 
-
-
-    data.mac_class = BankLink::Mac::Custom
+      settings.mac_class = BankLink::Mac::Custom #Or roll your own
+    end
+```
+##### Add link(s)
+All the correct form fields can be found in various bank documentations, [listed below](https://github.com/jhaesus/bank_link/edit/master/README.md#additional-info). "Have fun"
+```ruby
+    bank.payment_link "https://url.of.link" do |form|
+      form[:VK_SERVICE] = "1001"
+      form[:VK_VERSION] = "008"
+      form[:VK_AMOUNT] = Proc.new { |link, object| object.price }
+      form[:VK_CURR] = "EUR"
+    end
+    bank.authorization_link "https://url.of.link/auth" do |form|
+      form[:VK_SERVICE] = "1001"
+      form[:VK_VERSION] = "008"
+    end
 ```
 ### View Helper
 ```haml
-= bank_links @object do |link|
-  = submit_tag(link.name)
+= payment_links @object do |link|
+  = submit_tag(link.bank.name)
 ```
 ```haml
-- BankLink.each do |link|
+- BankLink.payment_links do |link|
   = bank_link_tag link, @object do
-    = submit_tag(link.name)
+    = submit_tag(link.bank.name)
 ```
-#### Additional Options
-##### Override/Set Form Values
+#### Override/Set Form Values
 ```haml
-- BankLink.each do |link|
+- payment_links @object, { :values => { :VK_AMOUNT => Proc.new { |link, object| object.price * 2 } }} do |link|
+  = submit_tag
+```
+```haml
+- BankLink.payment_links do |link|
   = bank_link_tag link, @object, { :values => {:VK_AMOUNT => @object.price }} do
     = submit_tag
 ```
-##### Override/Set Form Attributes
+#### Override/Set Form Attributes
 ```haml
-- BankLink.each do |link|
+- payment_links @object, { :form => { :data => { :something => "other" } } } do |link|
+  = submit_tag
+```
+```haml
+- BankLink.payment_links do |link|
   = bank_link_tag link, @object, { :form => {:method => :get }} do
     = submit_tag
 ```
-
-#### Verifying Responses
+### Verifying Responses
 ```ruby
-  link = BankLink.configuration.links.name_of_link
+  link = BankLink.configuration.banks.name_of_link
   link.verify params
 ```
 
-### Additional Info
+## Additional Info
 [Pangalink.net](https://pangalink.net/info)
-#### Documentations
+### Documentations
 - [Danske Bank Documentation](http://www.danskebank.ee/et/14732.html)
 - [Krediidipank Documentation](http://www.krediidipank.ee/business/settlements/bank-link/tehniline_kirjeldus.pdf)
 - [LHV Documentation](http://www.lhv.ee/images/docs/Bank_Link_Technical_Specification-ET.pdf)

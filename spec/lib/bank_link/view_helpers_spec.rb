@@ -1,63 +1,70 @@
 class BLVHDummy
-  include ActionView::Helpers::UrlHelper
-  include ActionView::Helpers::TagHelper
-  include ActionView::Helpers::CaptureHelper
-  include ActionView::Helpers::FormTagHelper
-  include ActionView::Context
-  include BankLink::ViewHelpers
+  include ::ActionView::Helpers::UrlHelper
+  include ::ActionView::Helpers::TagHelper
+  include ::ActionView::Helpers::CaptureHelper
+  include ::ActionView::Helpers::FormTagHelper
+  include ::ActionView::Context
+  include ::BankLink::ViewHelpers
 end
 
 describe BankLink::ViewHelpers do
+
   subject { BLVHDummy.new }
   before(:all) do
     BankLink.configuration do |config|
-      config.links(:dummy_link, "https://some.where.com") do |data, form|
-        form[:SOLOPMT_VERSION] = "0003"
-        form[:SOLOPMT_STAMP] = "555"
-        form[:SOLOPMT_RCV_ID] = "99999999"
-        form[:SOLOPMT_AMOUNT] = "55.12"
-        form[:SOLOPMT_REF] = "55"
-        form[:SOLOPMT_MSG] = Proc.new { |link, object| "message for payment" }
-        form[:SOLOPMT_RETURN] = Proc.new { |link, object| "http://some.where.else1.com" }
-        form[:SOLOPMT_CANCEL] = Proc.new { |link, object| "http://some.where.else2.com" }
-        form[:SOLOPMT_REJECT] = Proc.new { |link, object| "http://some.where.else3.com" }
+      config.banks :dummy_bank do |bank|
+        bank.settings.mac_class = BankLink::Mac::Solo
+        bank.settings.private_key = "MY MAC KEY"
+        bank.settings.digest = OpenSSL::Digest::MD5
 
-        form[:SOLOPMT_CONFIRM] = "YES"
-        form[:SOLOPMT_KEYVERS] = "0001"
-        form[:SOLOPMT_DATE] = "EXPRESS"
-        form[:SOLOPMT_CUR] = "EUR"
-        form[:SOLOPMT_LANGUAGE] = "3"
-        data.mac_class = BankLink::Mac::Solo
-        data.mac_key = "MY MAC KEY"
+        bank.payment_link "https://some.where.com" do |form|
+          form[:SOLOPMT_VERSION] = "0003"
+          form[:SOLOPMT_STAMP] = "555"
+          form[:SOLOPMT_RCV_ID] = "99999999"
+          form[:SOLOPMT_AMOUNT] = "55.12"
+          form[:SOLOPMT_REF] = "55"
+          form[:SOLOPMT_MSG] = Proc.new { |link, object| "message for payment" }
+          form[:SOLOPMT_RETURN] = Proc.new { |link, object| "http://some.where.else1.com" }
+          form[:SOLOPMT_CANCEL] = Proc.new { |link, object| "http://some.where.else2.com" }
+          form[:SOLOPMT_REJECT] = Proc.new { |link, object| "http://some.where.else3.com" }
+          form[:SOLOPMT_CONFIRM] = "YES"
+          form[:SOLOPMT_KEYVERS] = "0001"
+          form[:SOLOPMT_DATE] = "EXPRESS"
+          form[:SOLOPMT_CUR] = "EUR"
+          form[:SOLOPMT_LANGUAGE] = "3"
+        end
       end
 
-      config.links(:dummy_link_w_encoding, "https://some.where.com") do |data, form|
-        form[:SOLOPMT_VERSION] = "0003"
-        form[:SOLOPMT_STAMP] = "555"
-        form[:SOLOPMT_RCV_ID] = "99999999"
-        form[:SOLOPMT_AMOUNT] = "55.12"
-        data.encoding_key = "VK_ENCODING"
-        data.encoding = "UTF-8"
-        form[:SOLOPMT_REF] = "55"
-        form[:SOLOPMT_MSG] = Proc.new { |link, object| "message for payment" }
-        form[:SOLOPMT_RETURN] = Proc.new { |link, object| "http://some.where.else1.com" }
-        form[:SOLOPMT_CANCEL] = Proc.new { |link, object| "http://some.where.else2.com" }
-        form[:SOLOPMT_REJECT] = Proc.new { |link, object| "http://some.where.else3.com" }
+      config.banks :dummy_bank_w_encoding do |bank|
+        bank.settings.mac_class = BankLink::Mac::Solo
+        bank.settings.private_key = "MY MAC KEY"
+        bank.settings.encoding_key = "VK_ENCODING"
+        bank.settings.encoding = "UTF-8"
+        bank.settings.digest = OpenSSL::Digest::MD5
 
-        form[:SOLOPMT_CONFIRM] = "YES"
-        form[:SOLOPMT_KEYVERS] = "0001"
-        form[:SOLOPMT_DATE] = "EXPRESS"
-        form[:SOLOPMT_CUR] = "EUR"
-        form[:SOLOPMT_LANGUAGE] = "3"
-        data.mac_class = BankLink::Mac::Solo
-        data.mac_key = "MY MAC KEY"
+        bank.payment_link "https://some.where.com" do |form|
+          form[:SOLOPMT_VERSION] = "0003"
+          form[:SOLOPMT_STAMP] = "555"
+          form[:SOLOPMT_RCV_ID] = "99999999"
+          form[:SOLOPMT_AMOUNT] = "55.12"
+          form[:SOLOPMT_REF] = "55"
+          form[:SOLOPMT_MSG] = Proc.new { |link, object| "message for payment" }
+          form[:SOLOPMT_RETURN] = Proc.new { |link, object| "http://some.where.else1.com" }
+          form[:SOLOPMT_CANCEL] = Proc.new { |link, object| "http://some.where.else2.com" }
+          form[:SOLOPMT_REJECT] = Proc.new { |link, object| "http://some.where.else3.com" }
+          form[:SOLOPMT_CONFIRM] = "YES"
+          form[:SOLOPMT_KEYVERS] = "0001"
+          form[:SOLOPMT_DATE] = "EXPRESS"
+          form[:SOLOPMT_CUR] = "EUR"
+          form[:SOLOPMT_LANGUAGE] = "3"
+        end
       end
     end
   end
 
-  let(:dummy_link) { BankLink.configuration.links[:dummy_link] }
+  let(:dummy_link) { BankLink.configuration.banks[:dummy_bank].payment_link }
 
-  let(:dummy_link_w_encoding) { BankLink.configuration.links[:dummy_link_w_encoding] }
+  let(:dummy_link_w_encoding) { BankLink.configuration.banks[:dummy_bank_w_encoding].payment_link }
 
   let(:result_plain) { subject.bank_link_tag(dummy_link) }
 

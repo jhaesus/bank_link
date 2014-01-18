@@ -3,16 +3,8 @@ module BankLink
     class Base
       attr_accessor :link, :data
 
-      def self.query_key
-        raise NotImplementedError
-      end
-
-      def self.key
-        raise NotImplementedError
-      end
-
-      def self.default_algorithm
-        raise NotImplementedError
+      def settings *args, &block
+        link.settings *args, &block
       end
 
       def initialize link, data
@@ -20,29 +12,24 @@ module BankLink
         self.data = data
       end
 
-      def generate
+      def generate *args
         raise NotImplementedError
       end
 
-      def verify version, mac
-        public_key = OpenSSL::X509::Certificate.new(link.data.public_key).public_key
-        public_key.verify algorithm.new, Base64.strict_decode64(mac), request_data(version)
+      def key *args
+        raise NotImplementedError
       end
 
-      def key
-        self.class.key
+      def query_key *args
+        raise NotImplementedError
       end
 
-      def query_key
-        self.class.query_key
+      def verify *args
+        raise NotImplementedError
       end
 
-      def order version
+      def keys version
         BankLink.configuration.mac_fields[query_key][version.intern]
-      end
-
-      def algorithm
-        link.data.algorithm || self.class.default_algorithm
       end
     end
   end

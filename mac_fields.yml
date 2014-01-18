@@ -10,6 +10,15 @@ VK_SERVICE:
     - :VK_NAME
     - :VK_REF
     - :VK_MSG
+  "1002":
+    - :VK_SERVICE
+    - :VK_VERSION
+    - :VK_SND_ID
+    - :VK_STAMP
+    - :VK_AMOUNT
+    - :VK_CURR
+    - :VK_REF
+    - :VK_MSG
   "1101":
     - :VK_SERVICE
     - :VK_VERSION
@@ -33,11 +42,55 @@ VK_SERVICE:
     - :VK_REC_ID
     - :VK_STAMP
     - :VK_REF
-
-
     - :VK_MSG
+  "1902":
+    - :VK_SERVICE
+    - :VK_VERSION
+    - :VK_SND_ID
+    - :VK_REC_ID
+    - :VK_STAMP
+    - :VK_REF
+    - :VK_MSG
+    - :VK_ERROR_CODE
+  "3001":
+    - :VK_SERVICE
+    - :VK_VERSION
+    - :VK_USER
+    - :VK_DATE
+    - :VK_TIME
+    - :VK_SND_ID
+  "3002":
+    - :VK_SERVICE
+    - :VK_VERSION
+    - :VK_USER
+    - :VK_DATE
+    - :VK_TIME
+    - :VK_SND_ID
+    - :VK_INFO
+  "3003":
+    - :VK_SERVICE
+    - :VK_VERSION
+    - :VK_SND_ID
+    - :VK_REC_ID
+    - :VK_NONCE
+    - :VK_INFO
+  "4001":
+    - :VK_SERVICE
+    - :VK_VERSION
+    - :VK_SND_ID
+    - :VK_REPLY
+    - :VK_RETURN
+    - :VK_DATE
+    - :VK_TIME
+  "4002":
+    - :VK_SERVICE
+    - :VK_VERSION
+    - :VK_SND_ID
+    - :VK_REC_ID
+    - :VK_NONCE
+    - :VK_RETURN
 SOLOPMT_VERSION:
-  "0003":
+  "0002":
     - :SOLOPMT_VERSION
     - :SOLOPMT_STAMP
     - :SOLOPMT_RCV_ID
@@ -45,7 +98,7 @@ SOLOPMT_VERSION:
     - :SOLOPMT_REF
     - :SOLOPMT_DATE
     - :SOLOPMT_CUR
-  "0002":
+  "0003":
     - :SOLOPMT_VERSION
     - :SOLOPMT_STAMP
     - :SOLOPMT_RCV_ID

@@ -6,27 +6,29 @@ require "base64"
 module BankLink
   module Mac
     class VK < BankLink::Mac::Base
-      def self.query_key
+      def query_key
         :VK_SERVICE
       end
 
-      def self.key
+      def key
         :VK_MAC
-      end
-
-      def self.default_algorithm
-        OpenSSL::Digest::SHA1
       end
 
       def generate version=data[query_key]
         Base64.strict_encode64(
-          algorithm_key.sign(algorithm.new, request_data(version))
+          private_key.sign(settings.digest.new, request_data(version))
         )
       end
 
+      def verify version, mac
+        public_key = OpenSSL::X509::Certificate.new(settings.public_key).public_key
+        public_key.verify settings.digest.new, Base64.strict_decode64(mac), request_data(version)
+      end
+
       private
-      def algorithm_key
-        OpenSSL::PKey::RSA.new(link.data.mac_key, link.data.mac_key_passphrase)
+
+      def private_key
+        OpenSSL::PKey::RSA.new(settings.private_key, settings.private_key_passphrase)
       end
 
       def field_for value
@@ -34,7 +36,7 @@ module BankLink
       end
 
       def request_data version
-        order(version).collect { |key_name|
+        keys(version).collect { |key_name|
           field_for data[key_name].to_s
         }.flatten.join
       end

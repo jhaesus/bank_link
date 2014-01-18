@@ -1,19 +1,24 @@
 describe BankLink::Mac::VK do
-  specify { expect(BankLink::Mac::VK.query_key).to eq(:VK_SERVICE) }
-  specify { expect(BankLink::Mac::VK.key).to eq(:VK_MAC) }
-  specify { expect(BankLink::Mac::VK.default_algorithm).to eq(OpenSSL::Digest::SHA1) }
 
-  let(:link) do
-    BankLink::Link.new(:link, :url) do |data, form|
-      data.algorithm = OpenSSL::Digest::MD5
+  let :bank do
+    BankLink::Bank.new :name do |bank|
+      bank.settings.digest = OpenSSL::Digest::MD5
+    end
+  end
+
+  let :link do
+    BankLink::Link.new bank, "some.url" do |form|
     end
   end
 
   let(:data) { Hashie::Mash.new(:VK_SERVICE => "1001") }
 
-  subject { BankLink::Mac::VK.new(link,data) }
+  subject do
+    BankLink::Mac::VK.new(link, data)
+  end
 
-  specify { expect(subject.key).to eq(BankLink::Mac::VK.key) }
+  specify { expect(subject.query_key).to eq(:VK_SERVICE) }
+  specify { expect(subject.key).to eq(:VK_MAC) }
 
   let(:private_key) { double("Key") }
 
