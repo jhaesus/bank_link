@@ -13,22 +13,22 @@ module BankLink
     end
 
     def authorization_links object=nil, options={}, &block
-      content_tag(:div, (options[:container] || {})) do
-        BankLink.authorization_links do |link|
-          concat(bank_link_tag(link, object, options, &block))
-        end
-      end
+      bank_links :authorization_links, object, options, &block
     end
 
     def payment_links object=nil, options={}, &block
+      bank_links :payment_links, object, options, &block
+    end
+
+    private
+
+    def bank_links type, object, options, &block
       content_tag(:div, (options[:container] || {})) do
-        BankLink.payment_links do |link|
+        BankLink.method(type).call do |link|
           concat(bank_link_tag(link, object, options, &block))
         end
       end
     end
-
-    private
 
     def bank_link_form_options link, form_data, options={}
       form_options = { :action => link.url, :method => :post }
