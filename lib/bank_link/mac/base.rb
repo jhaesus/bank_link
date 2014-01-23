@@ -28,8 +28,8 @@ module BankLink
         raise NotImplementedError
       end
 
-      def keys version
-        BankLink.configuration.mac_fields[query_key][version.intern]
+      def keys version, type=:request
+        BankLink.configuration.mac_fields[query_key][type][version.intern]
       end
     end
   end

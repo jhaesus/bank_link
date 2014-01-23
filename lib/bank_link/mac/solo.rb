@@ -15,9 +15,19 @@ module BankLink
         settings.digest.hexdigest(request_data(version).join).upcase
       end
 
+      def verify content
+        version = content[returnify(query_key)]
+        check = content[returnify(key)]
+        settings.digest.hexdigest(request_data(version, :response).join).upcase == check
+      end
+
+      def returnify key
+        key.to_s.gsub('SOLOPMT_','SOLOPMT_RETURN_')
+      end
+
       private
-      def request_data version
-        keys(version).collect { |key_name|
+      def request_data version, type=:request
+        keys(version, type).collect { |key_name|
           field_for data[key_name].to_s
         } + [field_for(settings.private_key)]
       end

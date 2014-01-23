@@ -20,9 +20,11 @@ module BankLink
         )
       end
 
-      def verify version, mac
+      def verify content
+        version = content[query_key]
+        check = content[key]
         public_key = OpenSSL::X509::Certificate.new(settings.public_key).public_key
-        public_key.verify settings.digest.new, Base64.strict_decode64(mac), request_data(version)
+        public_key.verify settings.digest.new, Base64.strict_decode64(check), request_data(version, :response)
       end
 
       private
@@ -35,8 +37,8 @@ module BankLink
         ["%03d" % value.length, value]
       end
 
-      def request_data version
-        keys(version).collect { |key_name|
+      def request_data version, type=:request
+        keys(version, type).collect { |key_name|
           field_for data[key_name].to_s
         }.flatten.join
       end

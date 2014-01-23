@@ -24,8 +24,7 @@ module BankLink
     def verify params
       content = Hashie::Mash.new(params)
       mac = settings.mac_class.new(self, content)
-      version = params[mac.query_key]
-      mac.verify version, params[mac.key]
+      mac.verify content
     end
 
     def calculate_keys content, object
