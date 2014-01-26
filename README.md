@@ -29,7 +29,7 @@ BankLink do |config|
 Defaults can be found in [mac_fields.yml](https://github.com/jhaesus/bank_link/blob/master/mac_fields.yml)
 ```ruby
   config.mac_fields do |mac_fields|
-    mac_fields.SOLOPMT_VERSION["0003"] = [
+    mac_fields.SOLOPMT_VERSION[:request]["0003"] = [
       :VERSION,
       :STAMP,
       :RCV_ID,
