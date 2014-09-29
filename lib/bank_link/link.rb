@@ -21,12 +21,6 @@ module BankLink
       content
     end
 
-    def verify params
-      content = Hashie::Mash.new(params)
-      mac = settings.mac_class.new(self, content)
-      mac.verify content
-    end
-
     def calculate_keys content, object
       content.each do |key, value|
         content[key] = content[key].call(self, object) if content[key].is_a?(Proc)
