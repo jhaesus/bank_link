@@ -13,6 +13,12 @@ module BankLink
       yield(self) if block_given?
     end
 
+    def verify params
+      content = Hashie::Mash.new(params)
+      mac = settings.mac_class.new(self, content)
+      mac.verify content
+    end
+
     def settings &block
       block_given? ? yield(@settings) : @settings
     end
