@@ -39,7 +39,7 @@ module BankLink
 
       def request_data version, type=:request
         keys(version, type).collect { |key_name|
-          field_for data[key_name].to_s
+          field_for data[key_name].to_s unless data[key_name].nil?
         }.flatten.join
       end
     end
